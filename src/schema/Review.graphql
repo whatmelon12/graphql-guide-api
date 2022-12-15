@@ -1,0 +1,21 @@
+type Review {
+    id: ID!
+    text: String!
+    stars: Int
+    fullReview: String!
+    createdAt: Date!
+    updatedAt: Date!
+}
+
+extend type Query {
+    reviews: [Review!]!
+}
+
+type Mutation {
+    createReview(review: CreateReviewInput!): Review
+}
+
+input CreateReviewInput {
+    text: String!
+    stars: Int
+}

@@ -1,0 +1,10 @@
+scalar Date
+
+type Query {
+  hello: String!
+  isoString(date: Date!): String!
+}
+
+# THIS IS A COMMENT: import Review first
+#import 'Review.graphql'
+#import 'User.graphql'
