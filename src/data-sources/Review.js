@@ -6,8 +6,9 @@ export default class Reviews extends MongoDataSource {
     }
 
     async create(review) {
+        review.authorId = this.context.user._id
         review.updatedAt = new Date()
-        await this.collection.insertOne(review);
-        return review;
+        await this.collection.insertOne(review)
+        return review
     }
 }

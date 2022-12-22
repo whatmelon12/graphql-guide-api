@@ -9,8 +9,11 @@ export default {
     },
     Review: {
         id: review => review._id,
-        fullReview: review =>
-            `Someone in the internet gave ${review.stars} stars, saying: "${review.text}"`,
+        author: (review, _, { dataSources }) => dataSources.users.findOneById(review.authorId),
+        fullReview: async (review, _, { dataSources }) => {
+            const author = await dataSources.users.findOneById(review.authorId)
+            return `${author.firstName} ${author.lastName} gave ${review.stars} stars, saying: "${review.text}"`
+        },
         createdAt: review => review._id.getTimestamp(),
         updatedAt: review => review.updatedAt || resolvers.Review.createdAt(review)
     }
