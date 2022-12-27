@@ -1,10 +1,30 @@
 import { AuthenticationError, ForbiddenError } from "apollo-server"
+import { addDays, differenceInDays } from "date-fns"
 
 export default {
     Query: {
         me: (_, __, context) => context.user,
         user: (_, { id }, { dataSources }) => dataSources.users.findOneById(id),
         searchUsers: (_, { term }, { dataSources }) => dataSources.users.search(term)
+    },
+
+    UserResult: {
+        __resolveType: result => {
+            if (result.deletedAt) {
+                return 'DeletedUser'
+            } else if (result.suspendedAt) {
+                return 'SuspendedUser'
+            } else {
+                return 'User'
+            }
+        }
+    },
+
+    SuspendedUser: {
+        daysLeft: user => {
+            const end = addDays(user.suspendedAt, user.durationInDays)
+            return differenceInDays(end, new Date())
+        }
     },
 
     User: {
@@ -28,7 +48,7 @@ export default {
                 throw new AuthenticationError('wrong secretKey')
             }
 
-            dataSources.users.create(user)
+            return dataSources.users.create(user)
         }
     }
 }
