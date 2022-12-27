@@ -1,12 +1,28 @@
+import { UserInputError } from "apollo-server";
 import { GraphQLScalarType } from "graphql";
 import { ObjectId } from 'mongodb';
+
+const OBJECT_ID_ERROR = 'Argument passed in must be a single String of 12 bytes or a string of 24 hex characters'
+const parseValue = value => {
+    let id;
+    try {
+        id = ObjectId(value)
+    } catch (error) {
+        if (error.message === OBJECT_ID_ERROR) {
+            throw new UserInputError('invalid id', { invalidArgs: ['id'] })
+        } else {
+            throw error
+        }
+    }
+    return id
+}
 
 export default {
     ObjID: new GraphQLScalarType({
         name: 'ObjID',
         description: 'ObjectId',
-        parseValue: value => ObjectId(value),
-        parseLiteral: ast => ObjectId(ast.value),
+        parseValue,
+        parseLiteral: ast => parseValue(ast.value),
         serialize: objectId => objectId.toString()
     })
 }
