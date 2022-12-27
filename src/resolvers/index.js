@@ -1,7 +1,7 @@
 const resolvers = {
     Query: {
         hello: () => 'Hello World!',
-        isoString: (_, { date }) => date.toISOString()
+        // isoString: (_, { date }) => date.toISOString()
     }
 }
 import Date from './Date'

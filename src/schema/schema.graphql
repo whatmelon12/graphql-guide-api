@@ -1,11 +1,11 @@
+
 scalar Date
 scalar ObjID
 
 type Query {
   hello: String!
-  isoString(date: Date!): String!
+  # isoString(date: Date!): String!
 }
 
-# THIS IS A COMMENT: import Review first
-#import 'Review.graphql'
-#import 'User.graphql'
+#import "Review.graphql"
+#import "User.graphql"
