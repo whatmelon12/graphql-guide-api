@@ -1,6 +1,8 @@
 import { ForbiddenError, UserInputError } from "apollo-server";
+import { isEmpty } from "lodash";
+import { InputError } from "../util/errors";
 
-const MIN_REVIEW_LENGTH = 2;
+const MIN_REVIEW_LENGTH = 10;
 const VALID_STARS = [0, 1, 2, 3, 4, 5];
 
 export default {
@@ -13,18 +15,18 @@ export default {
                 throw new ForbiddenError('mut be logged in')
             }
 
+            const errors = {}
+
             if (review.text.length < MIN_REVIEW_LENGTH) {
-                throw new UserInputError(
-                    `text must be at least ${MIN_REVIEW_LENGTH} characters`,
-                    { invalidArgs: ['text'] }
-                )
+                errors.text = `text must be at least ${MIN_REVIEW_LENGTH} characters`
             }
 
             if (review.stars && !VALID_STARS.includes(review.stars)) {
-                throw new UserInputError(
-                    `stars must be bewteen 0 and 5`,
-                    { invalidArgs: ['stars'] }
-                )
+                errors.stars = `stars must be bewteen 0 and 5`
+            }
+
+            if (!isEmpty(errors)) {
+                throw new InputError({ review: errors })
             }
 
             dataSources.reviews.create(review)
