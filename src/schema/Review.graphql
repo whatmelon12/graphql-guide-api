@@ -17,6 +17,10 @@ type Mutation {
     createReview(review: CreateReviewInput!): Review
 }
 
+type Subscription {
+    reviewCreated: Review!
+}
+
 input CreateReviewInput {
     text: String!
     stars: Int

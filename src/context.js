@@ -4,7 +4,7 @@ import { getAuthIdFromJWT } from "./util/auth";
 
 export default async ({ req }) => {
     const context = {};
-    const jwt = req.headers.authorization;
+    const jwt = req && req.headers.authorization;
     let authId
 
     if (jwt) {
