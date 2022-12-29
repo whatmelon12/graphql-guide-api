@@ -15,7 +15,7 @@ const server = new ApolloServer({
     formatError
 })
 
-const start = () => {
+const start = async () => {
     connectToDB()
     Github.startPolling()
     server
@@ -27,4 +27,4 @@ if (process.env.NODE_ENV !== 'test') {
     start()
 }
 
-export { typeDefs, resolvers, context, formatError }
+export { typeDefs, resolvers, context, formatError, server }

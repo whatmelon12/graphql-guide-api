@@ -3,12 +3,7 @@ import { MongoDataSource } from "apollo-datasource-mongodb";
 export default class Users extends MongoDataSource {
     constructor(collection) {
         super(collection)
-
-        this.collection.createIndex({
-            firstName: 'text',
-            lastName: 'text',
-            username: 'text'
-        })
+        this._createIndex()
     }
 
     async create(user) {
@@ -19,5 +14,13 @@ export default class Users extends MongoDataSource {
 
     search(term) {
         return this.collection.find({ $text: { $search: term } }).toArray()
+    }
+
+    async _createIndex() {
+        await this.collection.createIndex({
+            firstName: 'text',
+            lastName: 'text',
+            username: 'text'
+        })
     }
 }
