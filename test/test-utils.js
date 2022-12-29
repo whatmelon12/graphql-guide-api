@@ -10,7 +10,7 @@ import {
 
 const updatedAt = new Date('2020-01-01')
 
-const mockUser = {
+export const mockUser = {
     _id: ObjectId('5d24f846d2f8635086e55ed3'),
     firstName: 'First',
     lastName: 'Last',
@@ -36,18 +36,24 @@ const reviewB = {
 }
 const mockReviews = [reviewA, reviewB]
 
+const insertOne = jest.fn(
+    doc => (doc._id = new ObjectId('5cf8b6ff37568a1fa500ba4e'))
+)
+
 export const createTestServer = ({ context = defaultContext } = {}) => {
     const reviews = new Reviews({
         find: () => ({
             toArray: jest.fn().mockResolvedValue(mockReviews)
-        })
+        }),
+        insertOne
     })
 
     const users = new Users({
         createIndex: jest.fn(),
-        find: () => ({
+        find: jest.fn(() => ({
             toArray: jest.fn().mockResolvedValue(mockUsers)
-        })
+        })),
+        insertOne
     })
 
     const server = new ApolloServer({
